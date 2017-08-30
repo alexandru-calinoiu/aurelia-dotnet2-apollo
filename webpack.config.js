@@ -1,6 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const poststylus = require('poststylus');
+const jeet = require('jeet');
+const rupture = require('rupture');
+const combineMq = require('node-combine-mq');
 const { AureliaPlugin } = require('aurelia-webpack-plugin');
 const bundleOutputDir = './wwwroot/dist';
 
@@ -31,7 +34,12 @@ module.exports = (env) => {
             new webpack.LoaderOptionsPlugin({
                 options: {
                     stylus: {
-                        use: [poststylus([ 'autoprefixer' ])]
+                        use: [
+                            jeet(),
+                            rupture(),
+                            combineMq(),
+                            poststylus([ 'autoprefixer' ])
+                        ]
                     }
                 }
             }),
@@ -40,8 +48,7 @@ module.exports = (env) => {
                 context: __dirname,
                 manifest: require('./wwwroot/dist/vendor-manifest.json')
             }),
-            new AureliaPlugin({ aureliaApp: 'boot' }),
-            new webpack.HotModuleReplacementPlugin()
+            new AureliaPlugin({ aureliaApp: 'boot' })
         ].concat(isDevBuild ? [
             new webpack.SourceMapDevToolPlugin({
                 filename: '[file].map', // Remove this line if you prefer inline source maps
