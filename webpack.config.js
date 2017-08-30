@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const poststylus = require('poststylus');
 const { AureliaPlugin } = require('aurelia-webpack-plugin');
 const bundleOutputDir = './wwwroot/dist';
 
@@ -22,16 +23,25 @@ module.exports = (env) => {
                 { test: /\.ts$/i, include: /ClientApp/, use: 'ts-loader?silent=true' },
                 { test: /\.html$/i, use: 'html-loader' },
                 { test: /\.css$/i, use: isDevBuild ? 'css-loader' : 'css-loader?minimize' },
+                { test: /\.styl$/i, use:['style-loader', 'css-loader', 'stylus-loader'] },
                 { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
             ]
         },
         plugins: [
+            new webpack.LoaderOptionsPlugin({
+                options: {
+                    stylus: {
+                        use: [poststylus([ 'autoprefixer' ])]
+                    }
+                }
+            }),
             new webpack.DefinePlugin({ IS_DEV_BUILD: JSON.stringify(isDevBuild) }),
             new webpack.DllReferencePlugin({
                 context: __dirname,
                 manifest: require('./wwwroot/dist/vendor-manifest.json')
             }),
-            new AureliaPlugin({ aureliaApp: 'boot' })
+            new AureliaPlugin({ aureliaApp: 'boot' }),
+            new webpack.HotModuleReplacementPlugin()
         ].concat(isDevBuild ? [
             new webpack.SourceMapDevToolPlugin({
                 filename: '[file].map', // Remove this line if you prefer inline source maps
