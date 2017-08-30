@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@types/webpack-env": "^1.13.0",
+    "@types/nprogress": "0.0.29",
     "aspnet-webpack": "^2.0.1",
     "aurelia-webpack-plugin": "^2.0.0-rc.2",
     "css-loader": "^0.28.0",
