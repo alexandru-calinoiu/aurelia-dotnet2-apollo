@@ -3,6 +3,8 @@ import { Aurelia, PLATFORM } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
+import './app/assets/styl/app.styl';
+
 declare const IS_DEV_BUILD: boolean; // The value is supplied by Webpack during the build
 
 export function configure(aurelia: Aurelia) {
